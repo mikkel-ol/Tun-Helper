@@ -6,8 +6,8 @@ import { GoogleSpreadsheet } from "google-spreadsheet";
 dotenv.config();
 
 const creds = {
-  client_email: process.env.GOOGLE_ACC_EMAIL!,
-  private_key: process.env.GOOGLE_PRIV_KEY!,
+  client_email: process.env.TH_GOOGLE_ACC_EMAIL!,
+  private_key: process.env.TH_GOOGLE_PRIV_KEY!,
 };
 
 const client = new Client({
@@ -32,7 +32,7 @@ client.on("messageUpdate", async (oldMsg, newMsg) => {
   )
     return;
 
-  const doc = new GoogleSpreadsheet(process.env.GOOGLE_SHEET_ID);
+  const doc = new GoogleSpreadsheet(process.env.TH_GOOGLE_SHEET_ID);
   await doc.useServiceAccountAuth(creds);
   await doc.loadInfo();
   const sheet = doc.sheetsById[787890111];
@@ -111,4 +111,4 @@ client.on("ready", () => {
   Logger.info("Logged in");
 });
 
-client.login(process.env.BOT_TOKEN);
+client.login(process.env.TH_BOT_TOKEN);
