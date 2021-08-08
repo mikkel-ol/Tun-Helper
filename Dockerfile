@@ -18,6 +18,4 @@ RUN ls -a
 RUN npm install
 RUN npm run build
 
-EXPOSE 7777
-
 CMD [ "node", "./dist/src/index.js" ]
