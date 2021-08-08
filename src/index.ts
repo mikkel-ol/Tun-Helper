@@ -7,7 +7,7 @@ dotenv.config();
 
 const creds = {
   client_email: process.env.TH_GOOGLE_ACC_EMAIL!,
-  private_key: process.env.TH_GOOGLE_PRIV_KEY!.replace(/['"]+/g, ''),
+  private_key: process.env.TH_GOOGLE_PRIV_KEY!.replace(/['"]+/g, '').replace(/\\n/gm, '\n'),
 };
 
 const client = new Client({
