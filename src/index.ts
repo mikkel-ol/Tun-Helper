@@ -25,20 +25,86 @@ const meleeRegEx =
 client.on("messageUpdate", async (oldMsg, newMsg) => {
   const msg = await newMsg.fetch();
 
-  // ignore anything not from Raid-Helper
-  if (msg.author.id !== "579155972115660803") return;
+  // ignore anything not from Raid-Helper and in raid 1 sign up channel
+  if (
+    msg.author.id !== "579155972115660803" ||
+    msg.channelId !== "854104235619909712"
+  )
+    return;
 
   const doc = new GoogleSpreadsheet(process.env.GOOGLE_SHEET_ID);
   await doc.useServiceAccountAuth(creds);
   await doc.loadInfo();
   const sheet = doc.sheetsById[787890111];
+  await sheet.loadCells("I2:L17");
+
+  // clear cells
+  for (let i = 0; i < 16; i += 1) {
+    // rows
+    for (let j = 0; j < 4; j += 1) {
+      // columns
+      const cell = await sheet.getCell(i + 1, j + 8);
+      cell.value = "";
+    }
+  }
 
   const fields = msg.embeds[0].fields;
 
-  const tankFields = fields.filter((field) => field.value.match(tankRegEx));
-  const healerFields = fields.filter((field) => field.value.match(healerRegEx));
-  const rangedFields = fields.filter((field) => field.value.match(rangedRegEx));
-  const meleeFields = fields.filter((field) => field.value.match(meleeRegEx));
+  const tankFields = fields
+    .map((field) => field.value)
+    .join()
+    .split(/\r?\n/)
+    .filter((s) => s.match(tankRegEx));
+  const healerFields = fields
+    .map((field) => field.value)
+    .join()
+    .split(/\r?\n/)
+    .filter((s) => s.match(healerRegEx));
+  const rangedFields = fields
+    .map((field) => field.value)
+    .join()
+    .split(/\r?\n/)
+    .filter((s) => s.match(rangedRegEx));
+  const meleeFields = fields
+    .map((field) => field.value)
+    .join()
+    .split(/\r?\n/)
+    .filter((s) => s.match(meleeRegEx));
+
+  const tankNames = tankFields
+    .map((field) => field.split("**"))
+    .map((arr) => arr[1]);
+  const healerNames = healerFields
+    .map((field) => field.split("**"))
+    .map((arr) => arr[1]);
+  const rangedNames = rangedFields
+    .map((field) => field.split("**"))
+    .map((arr) => arr[1]);
+  const meleeNames = meleeFields
+    .map((field) => field.split("**"))
+    .map((arr) => arr[1]);
+
+  for (let i = 0; i < tankFields.length; i += 1) {
+    const cell = await sheet.getCell(i + 1, 8);
+    cell.value = tankNames[i];
+  }
+
+  for (let i = 0; i < healerFields.length; i += 1) {
+    const cell = await sheet.getCell(i + 1, 9);
+    cell.value = healerNames[i];
+  }
+
+  for (let i = 0; i < rangedFields.length; i += 1) {
+    const cell = await sheet.getCell(i + 1, 10);
+    cell.value = rangedNames[i];
+  }
+
+  for (let i = 0; i < meleeFields.length; i += 1) {
+    const cell = await sheet.getCell(i + 1, 11);
+    cell.value = meleeNames[i];
+  }
+
+  await sheet.saveUpdatedCells();
 });
 
 client.on("ready", () => {
