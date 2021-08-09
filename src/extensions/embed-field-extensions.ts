@@ -9,6 +9,7 @@ if (!Array.prototype.filterValueByRegEx)
         return this.map((field) => field.value)
             .join()
             .split(/\r?\n/)
+            .map((s) => (s.indexOf("Bench") === -1 ? s : s.substring(0, s.indexOf("Bench"))))
             .filter((s) => s.match(regEx));
     };
 
