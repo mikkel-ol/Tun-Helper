@@ -6,6 +6,7 @@ import { GoogleService } from "../utils/GoogleService";
 import "../extensions/embed-field-extensions";
 import "../extensions/string-extensions";
 import { Logger } from "../utils/Logger";
+import { CompositionService } from "../utils/CompositionService";
 
 @Service()
 export class Kara implements SignupHandler {
@@ -15,6 +16,7 @@ export class Kara implements SignupHandler {
 
     private async onEvent(oldMessage: Message | PartialMessage, newMessage: Message | PartialMessage): Promise<void> {
         const gService = Container.get<GoogleService>(GoogleService);
+        const compService = Container.get<CompositionService>(CompositionService);
 
         const msg = await newMessage.fetch();
 
@@ -51,6 +53,8 @@ export class Kara implements SignupHandler {
         const healerPairs = healerFields.getNamesAndColors();
         const rangedPairs = rangedFields.getNamesAndColors();
         const meleePairs = meleeFields.getNamesAndColors();
+
+        compService.makeGroups({ tanks: tankPairs, healers: healerPairs, ranged: rangedPairs, melee: meleePairs });
 
         await gService.updateColumnWithColor(start, tankPairs, sheet);
         await gService.updateColumnWithColor([start[0]+1, start[1]], healerPairs, sheet);
