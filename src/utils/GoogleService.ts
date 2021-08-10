@@ -1,5 +1,6 @@
 import { GoogleSpreadsheet, GoogleSpreadsheetWorksheet } from "google-spreadsheet";
 import { Service } from "typedi";
+import { ClassColorPair } from "../types/ClassColorPair";
 import { Logger } from "./Logger";
 
 @Service()
@@ -58,6 +59,20 @@ export class GoogleService {
         for (let i = 0; i < values.length; i += 1) {
             const cell = await sheet.getCell(i + cellIndex[1], cellIndex[0]);
             cell.value = values[i];
+        }
+    }
+
+    /**
+     * Update column from starting position with values and color in @Pair. Continues vertical until all values have been set
+     * @param cellIndex 
+     * @param pair 
+     * @param sheet 
+     */
+    public async updateColumnWithColor(cellIndex: [number, number], pair: ClassColorPair[], sheet : GoogleSpreadsheetWorksheet) {
+        for (let i = 0; i < pair.length; i += 1) {
+            const cell = await sheet.getCell(i + cellIndex[1], cellIndex[0]);
+            cell.backgroundColor = pair[i].color;
+            cell.value = pair[i].name!;
         }
     }
 }

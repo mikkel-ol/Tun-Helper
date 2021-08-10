@@ -47,15 +47,15 @@ export class Kara implements SignupHandler {
         const rangedFields = fields.filterValueByRegEx(RegEx.RangedRegEx);
         const meleeFields = fields.filterValueByRegEx(RegEx.MeleeRegEx);
 
-        const tankNames = tankFields.getNames();
-        const healerNames = healerFields.getNames();
-        const rangedNames = rangedFields.getNames();
-        const meleeNames = meleeFields.getNames();
+        const tankPairs = tankFields.getNamesAndColors();
+        const healerPairs = healerFields.getNamesAndColors();
+        const rangedPairs = rangedFields.getNamesAndColors();
+        const meleePairs = meleeFields.getNamesAndColors();
 
-        await gService.updateColumn(start, tankNames, sheet);
-        await gService.updateColumn([start[0]+1, start[1]], healerNames, sheet);
-        await gService.updateColumn([start[0]+2, start[1]], rangedNames, sheet);
-        await gService.updateColumn([start[0]+3, start[1]], meleeNames, sheet);
+        await gService.updateColumnWithColor(start, tankPairs, sheet);
+        await gService.updateColumnWithColor([start[0]+1, start[1]], healerPairs, sheet);
+        await gService.updateColumnWithColor([start[0]+2, start[1]], rangedPairs, sheet);
+        await gService.updateColumnWithColor([start[0]+3, start[1]], meleePairs, sheet);
 
         await sheet.saveUpdatedCells();
 

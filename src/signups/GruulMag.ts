@@ -33,15 +33,15 @@ export class GruulMag implements SignupHandler {
         const rangedFields = fields.filterValueByRegEx(RegEx.RangedRegEx);
         const meleeFields = fields.filterValueByRegEx(RegEx.MeleeRegEx);
 
-        const tankNames = tankFields.getNames();
-        const healerNames = healerFields.getNames();
-        const rangedNames = rangedFields.getNames();
-        const meleeNames = meleeFields.getNames();
+        const tankPairs = tankFields.getNamesAndColors();
+        const healerPairs = healerFields.getNamesAndColors();
+        const rangedPairs = rangedFields.getNamesAndColors();
+        const meleePairs = meleeFields.getNamesAndColors();
 
-        await gService.updateColumn([8, 1], tankNames, sheet);
-        await gService.updateColumn([9, 1], healerNames, sheet);
-        await gService.updateColumn([10, 1], rangedNames, sheet);
-        await gService.updateColumn([11, 1], meleeNames, sheet);
+        await gService.updateColumnWithColor([8, 1], tankPairs, sheet);
+        await gService.updateColumnWithColor([9, 1], healerPairs, sheet);
+        await gService.updateColumnWithColor([10, 1], rangedPairs, sheet);
+        await gService.updateColumnWithColor([11, 1], meleePairs, sheet);
 
         await sheet.saveUpdatedCells();
 
