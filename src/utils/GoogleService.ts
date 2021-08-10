@@ -17,8 +17,8 @@ export class GoogleService {
             private_key: process.env.TH_GOOGLE_PRIV_KEY!.replace(/['"]+/g, "").replace(/\\n/gm, "\n"),
         };
 
-        this.doc = new GoogleSpreadsheet(process.env.TH_GOOGLE_SHEET_ID);     
-        
+        this.doc = new GoogleSpreadsheet(process.env.TH_GOOGLE_SHEET_ID);
+
         await this.doc.useServiceAccountAuth(creds);
         await this.doc.loadInfo();
     }
@@ -40,13 +40,15 @@ export class GoogleService {
             for (i = 0; i <= bottomRightIndex[0] - topLeftIndex[0]; i += 1) {
                 for (j = 0; j <= bottomRightIndex[1] - topLeftIndex[1]; j += 1) {
                     const cell = await sheet.getCell(j + topLeftIndex[1], i + topLeftIndex[0]);
+                    cell.backgroundColor = { red: 1, green: 1, blue: 1, alpha: 1 };
                     cell.value = "";
                 }
             }
         } catch (e) {
             Logger.error(e);
             Logger.error(`Cell was: ${i + topLeftIndex[0]},${j + topLeftIndex[1]}`);
-        } finally {}
+        } finally {
+        }
     }
 
     /**
@@ -64,11 +66,15 @@ export class GoogleService {
 
     /**
      * Update column from starting position with values and color in @Pair. Continues vertical until all values have been set
-     * @param cellIndex 
-     * @param pair 
-     * @param sheet 
+     * @param cellIndex
+     * @param pair
+     * @param sheet
      */
-    public async updateColumnWithColor(cellIndex: [number, number], pair: ClassColorPair[], sheet : GoogleSpreadsheetWorksheet) {
+    public async updateColumnWithColor(
+        cellIndex: [number, number],
+        pair: ClassColorPair[],
+        sheet: GoogleSpreadsheetWorksheet
+    ) {
         for (let i = 0; i < pair.length; i += 1) {
             const cell = await sheet.getCell(i + cellIndex[1], cellIndex[0]);
             cell.backgroundColor = pair[i].color;
