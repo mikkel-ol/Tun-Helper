@@ -7,4 +7,5 @@ export class ClassColors {
     static Mage = { red: 0.4117647, green: 0.8, blue: 0.9411765 };
     static Rogue = { red: 1, green: 0.9607843, blue: 0.4117647 };
     static Hunter = { red: 0.67058825, green: 0.83137256, blue: 0.4509804 };
+    static Priest = { red: 1, green: 1, blue: 1 };
 }

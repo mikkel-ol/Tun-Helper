@@ -26,4 +26,5 @@ export default new Map<string, any>([
     ["Sublety", ClassColors.Rogue],
     ["Combat", ClassColors.Rogue],
     ["Enhancement", ClassColors.Shaman],
+    ["Holy", ClassColors.Priest],
 ]);
