@@ -4,7 +4,7 @@ import { Client, Intents, Message, PartialMessage } from "discord.js";
 import { Logger } from "./utils/Logger";
 import Container from "typedi";
 import { GoogleService } from "./utils/GoogleService";
-import { GruulMag } from "./signups/GruulMag";
+import { TwentyFiveMan } from "./signups/TwentyFiveMan";
 import { Kara } from "./signups/Kara";
 
 dotenv.config();
@@ -17,7 +17,7 @@ const client = new Client({
     intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES],
 });
 
-Container.get<GruulMag>(GruulMag).run(client);
+Container.get<TwentyFiveMan>(TwentyFiveMan).run(client);
 Container.get<Kara>(Kara).run(client);
 
 client.on("ready", () => {

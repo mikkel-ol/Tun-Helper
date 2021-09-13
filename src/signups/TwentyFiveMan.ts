@@ -8,7 +8,7 @@ import "../extensions/string-extensions";
 import { Logger } from "../utils/Logger";
 
 @Service()
-export class GruulMag implements SignupHandler {
+export class TwentyFiveMan implements SignupHandler {
     public run(client: Client): void {
         client.on("messageUpdate", this.onEvent);
     }
