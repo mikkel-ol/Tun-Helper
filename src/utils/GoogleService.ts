@@ -82,17 +82,33 @@ export class GoogleService {
         }
     }
 
+    /**
+     * 
+     * @param cellIndex 
+     * @param sheet 
+     */
     public makeCellSignupTitle(cellIndex: [number, number], sheet: GoogleSpreadsheetWorksheet): void {
         const cell = sheet.getCell(cellIndex[1], cellIndex[0]);
         cell.backgroundColor = { red: 0.8031496, green: 0.25590551, blue: 0.14566929, alpha: 1 };
         cell.value = "Signup";
     }
 
+    /**
+     * 
+     * @param cellIndex 
+     * @param value 
+     * @param sheet 
+     */
     public makeCellValue(cellIndex: [number, number], value: string, sheet: GoogleSpreadsheetWorksheet): void {
         const cell = sheet.getCell(cellIndex[1], cellIndex[0]);
         cell.value = value;
     }
 
+    /**
+     * 
+     * @param cellIndex 
+     * @param sheet 
+     */
     public addRoleHeadlines(cellIndex: [number, number], sheet: GoogleSpreadsheetWorksheet): void {
         const tankCell = sheet.getCell(cellIndex[1], cellIndex[0]);
         const healerCell = sheet.getCell(cellIndex[1], cellIndex[0] + 1);
