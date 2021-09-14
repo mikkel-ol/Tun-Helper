@@ -22,11 +22,23 @@ export class TwentyFiveMan implements SignupHandler {
         if (msg.author.id !== "579155972115660803" || msg.channelId !== "854104235619909712") return;
 
         const sheet = gService.doc.sheetsById[787890111];
-        await sheet.loadCells("I2:L17");
+        await sheet.loadCells("G3:K200");
 
-        await gService.clearCells([8, 1], [11, 16], sheet);
+        gService.clearCells([6, 2], [10, 100], sheet);
 
         const fields = msg.embeds[0].fields;
+
+        console.log(msg);
+        
+
+        const title = msg.embeds[0].description
+            ?.split(":")
+            .filter((ele, index, arr) => index % 2 === 1)
+            .filter((ele, index, arr) => index !== 0)
+            .map((ele) => (ele === "empty" ? " " : ele))
+            .join("")!;
+
+        const date = msg.embeds[0].fields[0].value.split("[")[1].split("]")[0];
 
         const tankFields = fields.filterValueByRegEx(RegEx.TankRegEx);
         const healerFields = fields.filterValueByRegEx(RegEx.HealerRegEx);
@@ -38,10 +50,11 @@ export class TwentyFiveMan implements SignupHandler {
         const rangedPairs = rangedFields.getNamesAndColors();
         const meleePairs = meleeFields.getNamesAndColors();
 
-        await gService.updateColumnWithColor([8, 1], tankPairs, sheet);
-        await gService.updateColumnWithColor([9, 1], healerPairs, sheet);
-        await gService.updateColumnWithColor([10, 1], rangedPairs, sheet);
-        await gService.updateColumnWithColor([11, 1], meleePairs, sheet);
+        gService.addTitle([6, 3], date + ": " + title, sheet);
+        gService.updateColumnWithColor([6, 4], tankPairs, sheet);
+        gService.updateColumnWithColor([7, 4], healerPairs, sheet);
+        gService.updateColumnWithColor([8, 4], rangedPairs, sheet);
+        gService.updateColumnWithColor([9, 4], meleePairs, sheet);
 
         await sheet.saveUpdatedCells();
 
