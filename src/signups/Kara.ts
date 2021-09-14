@@ -10,7 +10,7 @@ import { Logger } from "../utils/Logger";
 @Service()
 export class Kara implements SignupHandler {
     public run(client: Client): void {
-        client.on("messageUpdate", this.onEvent);
+        client.on("messageUpdate", (a, b) => this.onEvent(a, b));
     }
 
     private async onEvent(oldMessage: Message | PartialMessage, newMessage: Message | PartialMessage): Promise<void> {

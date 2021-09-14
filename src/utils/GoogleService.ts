@@ -1,4 +1,4 @@
-import { GoogleSpreadsheet, GoogleSpreadsheetWorksheet } from "google-spreadsheet";
+import { GoogleSpreadsheet, GoogleSpreadsheetCell, GoogleSpreadsheetWorksheet } from "google-spreadsheet";
 import { Service } from "typedi";
 import { ClassColorPair } from "../types/ClassColorPair";
 import { Logger } from "./Logger";
@@ -82,8 +82,26 @@ export class GoogleService {
         }
     }
 
-    public addTitle(cellIndex: [number, number], title: string, sheet: GoogleSpreadsheetWorksheet) {
+    public makeCellSignupTitle(cellIndex: [number, number], sheet: GoogleSpreadsheetWorksheet): void {
         const cell = sheet.getCell(cellIndex[1], cellIndex[0]);
-        cell.value = title;
+        cell.backgroundColor = { red: 0.8031496, green: 0.25590551, blue: 0.14566929, alpha: 1 };
+        cell.value = "Signup";
+    }
+
+    public makeCellValue(cellIndex: [number, number], value: string, sheet: GoogleSpreadsheetWorksheet): void {
+        const cell = sheet.getCell(cellIndex[1], cellIndex[0]);
+        cell.value = value;
+    }
+
+    public addRoleHeadlines(cellIndex: [number, number], sheet: GoogleSpreadsheetWorksheet): void {
+        const tankCell = sheet.getCell(cellIndex[1], cellIndex[0]);
+        const healerCell = sheet.getCell(cellIndex[1], cellIndex[0] + 1);
+        const rangedCell = sheet.getCell(cellIndex[1], cellIndex[0] + 2);
+        const meleeCell = sheet.getCell(cellIndex[1], cellIndex[0] + 3);
+
+        tankCell.value = "Tanks";
+        healerCell.value = "Healers";
+        rangedCell.value = "Ranged";
+        meleeCell.value = "Melee";
     }
 }
