@@ -32,27 +32,26 @@ export class TwentyFiveMan implements SignupHandler {
         if (msg.author.id !== "579155972115660803" || msg.channelId !== "854104235619909712") return;
 
         const sheet = gService.doc.sheetsById[787890111];
-        
+
         const signup = this.signups.find((ele) => ele.messageId === msg.id);
 
+        let index;
+
         if (!signup) {
-            // make new signup
-            const topLeftIndex = [
+            index = [
                 this.topLeftMostIndex[0],
                 this.signups.length * this.offsetBetweenSignups + this.topLeftMostIndex[1],
             ] as [number, number];
 
             this.signups.push({
                 messageId: msg.id,
-                index: topLeftIndex
+                index,
             });
-
-            await this.updateSheet(topLeftIndex, msg, sheet);
         } else {
-            // modify existing signup
-            await this.updateSheet(signup.index, msg, sheet);
+            index = signup.index;
         }
-        
+        await this.updateSheet(index, msg, sheet);
+
         Logger.info(`Updated 25-man sheet`);
         await sheet.saveUpdatedCells();
     }
