@@ -8,11 +8,6 @@ import "../extensions/string-extensions";
 import { Logger } from "../utils/Logger";
 import { GoogleSpreadsheetWorksheet } from "google-spreadsheet";
 
-interface Signup {
-    messageId: string;
-    index: [number, number];
-}
-
 @Service()
 export class TwentyFiveMan implements SignupHandler {
     readonly topLeftMostIndex = [0, 0];
