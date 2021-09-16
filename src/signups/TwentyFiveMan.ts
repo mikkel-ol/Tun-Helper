@@ -7,6 +7,7 @@ import "../extensions/embed-field-extensions";
 import "../extensions/string-extensions";
 import { Logger } from "../utils/Logger";
 import { GoogleSpreadsheetWorksheet } from "google-spreadsheet";
+import { DateService } from "../utils/DateService";
 
 @Service()
 export class TwentyFiveMan implements SignupHandler {
@@ -29,7 +30,12 @@ export class TwentyFiveMan implements SignupHandler {
         const messages = (await msg.channel.messages.fetch())
             .filter((msg) => msg.author.id === "579155972115660803")
             .map((m) => m)
-            .sort((a, b) => this.compareDates(this.getDateFromMessageAsObject(a), this.getDateFromMessageAsObject(b)));
+            .sort((a, b) =>
+                DateService.compareDates(
+                    DateService.getDateFromMessageAsObject(a),
+                    DateService.getDateFromMessageAsObject(b)
+                )
+            );
 
         const sheet = gService.doc.sheetsById[787890111];
 
@@ -58,7 +64,7 @@ export class TwentyFiveMan implements SignupHandler {
 
         gService.clearCells(startingIndex, [startingIndex[0] + 3, startingIndex[1] + 19], sheet);
 
-        const date = this.getDateFromMessage(msg);
+        const date = DateService.getDateFromMessage(msg);
 
         const title = msg.embeds[0].description
             ?.split(":")
@@ -95,41 +101,5 @@ export class TwentyFiveMan implements SignupHandler {
         gService.updateColumnWithColor([startingIndex[0] + 7, startingIndex[1] + 5], healerPairs, sheet);
         gService.updateColumnWithColor([startingIndex[0] + 8, startingIndex[1] + 5], rangedPairs, sheet);
         gService.updateColumnWithColor([startingIndex[0] + 9, startingIndex[1] + 5], meleePairs, sheet);
-    }
-
-    private getDateFromMessage(msg: Message, asObject?: boolean): string {
-        return msg.embeds[0].fields[0].value.split("[")[1].split("]")[0];
-    }
-
-    private getDateFromMessageAsObject(msg: Message): Date {
-        return new Date(Number(msg.embeds[0].fields[0].value.split(":")[6]) * 1000);
-    }
-
-    /** https://expertcodeblog.wordpress.com/2018/03/12/typescript-how-to-compare-two-dates/
-     * Compares two Date objects and returns e number value that represents
-     * the result:
-     * 0 if the two dates are equal.
-     * 1 if the first date is greater than second.
-     * -1 if the first date is less than second.
-     * @param date1 First date object to compare.
-     * @param date2 Second date object to compare.
-     */
-    private compareDates(date1: Date, date2: Date): number {
-        // With Date object we can compare dates them using the >, <, <= or >=.
-        // The ==, !=, ===, and !== operators require to use date.getTime(),
-        // so we need to create a new instance of Date with 'new Date()'
-        let d1 = new Date(date1);
-        let d2 = new Date(date2);
-
-        // Check if the dates are equal
-        let same = d1.getTime() === d2.getTime();
-        if (same) return 0;
-
-        // Check if the first is greater than second
-        if (d1 > d2) return 1;
-
-        // Check if the first is less than second
-        if (d1 < d2) return -1;
-        else return 1;
     }
 }
