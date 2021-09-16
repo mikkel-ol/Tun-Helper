@@ -1,5 +1,4 @@
 import { ClassColorPair } from "../types/ClassColorPair";
-import { ClassColors } from "../types/ClassColors";
 import RoleMapping from "../types/RoleMapping";
 
 declare global {
