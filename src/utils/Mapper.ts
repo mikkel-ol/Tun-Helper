@@ -71,7 +71,7 @@ export class Mapper {
                 case "Protection1":
                     arr.push({
                         type: "Paladin",
-                        spec,
+                        spec: "Protection",
                         name: c.split(":")[2].split("**")[1],
                     });
                     break;
@@ -85,7 +85,7 @@ export class Mapper {
                 case "Holy1":
                     arr.push({
                         type: "Paladin",
-                        spec,
+                        spec: "Holy",
                         name: c.split(":")[2].split("**")[1],
                     });
                     break;
@@ -176,7 +176,7 @@ export class Mapper {
                 case "Restoration1":
                     arr.push({
                         type: "Shaman",
-                        spec,
+                        spec: "Restoration",
                         name: c.split(":")[2].split("**")[1],
                     });
                     break;
