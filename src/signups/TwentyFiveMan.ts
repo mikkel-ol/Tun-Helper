@@ -8,6 +8,8 @@ import "../extensions/string-extensions";
 import { Logger } from "../utils/Logger";
 import { GoogleSpreadsheetWorksheet } from "google-spreadsheet";
 import { DateService } from "../utils/DateService";
+import { Mapper } from "../utils/Mapper";
+import { Magtheridon } from "../assignments/Magtheridon";
 
 @Service()
 export class TwentyFiveMan implements SignupHandler {
@@ -46,7 +48,7 @@ export class TwentyFiveMan implements SignupHandler {
             ];
 
             await this.updateSheet(index, message, sheet);
-            await sheet.saveUpdatedCells();
+            //await sheet.saveUpdatedCells();
         });
 
         Logger.info(`Updated 25-man sheet`);
@@ -54,6 +56,8 @@ export class TwentyFiveMan implements SignupHandler {
 
     private async updateSheet(startingIndex: [number, number], msg: Message, sheet: GoogleSpreadsheetWorksheet) {
         const gService = Container.get<GoogleService>(GoogleService);
+        const mag = Container.get<Magtheridon>(Magtheridon);
+        const mapper = Container.get<Mapper>(Mapper);
 
         await sheet.loadCells({
             startColumnIndex: startingIndex[0],
@@ -74,6 +78,10 @@ export class TwentyFiveMan implements SignupHandler {
             .join("")!;
 
         const fields = msg.embeds[0].fields;
+
+        const classes = mapper.embedFieldsToClasses(fields);
+
+        mag.updateSheet(classes);
 
         const tankFields = fields.filterValueByRegEx(RegEx.TankRegEx);
         const healerFields = fields.filterValueByRegEx(RegEx.HealerRegEx);
