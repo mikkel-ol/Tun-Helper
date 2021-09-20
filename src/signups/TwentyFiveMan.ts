@@ -13,7 +13,7 @@ import { Magtheridon } from "../assignments/Magtheridon";
 
 @Service()
 export class TwentyFiveMan implements SignupHandler {
-    readonly topLeftMostIndex = [0, 0];
+    readonly topLeftMostIndex = [6, 0];
     readonly offsetBetweenSignups = 20;
 
     public run(client: Client): void {
@@ -41,6 +41,18 @@ export class TwentyFiveMan implements SignupHandler {
 
         const sheet = gService.doc.sheetsById[787890111];
 
+        await sheet.loadCells({
+            startColumnIndex: this.topLeftMostIndex[0],
+            startRowIndex: this.topLeftMostIndex[1],
+            endColumnIndex: this.topLeftMostIndex[0] + 4,
+            endRowIndex: this.topLeftMostIndex[1] + 100
+        });
+        gService.clearCells(
+            [this.topLeftMostIndex[0], this.topLeftMostIndex[1]],
+            [this.topLeftMostIndex[0] + 3, this.topLeftMostIndex[1] + 99],
+            sheet
+        );
+
         messages.forEach(async (message, i) => {
             let index = [this.topLeftMostIndex[0], i * this.offsetBetweenSignups + this.topLeftMostIndex[1]] as [
                 number,
@@ -48,7 +60,7 @@ export class TwentyFiveMan implements SignupHandler {
             ];
 
             await this.updateSheet(index, message, sheet);
-            //await sheet.saveUpdatedCells();
+            await sheet.saveUpdatedCells();
         });
 
         Logger.info(`Updated 25-man sheet`);
@@ -56,8 +68,8 @@ export class TwentyFiveMan implements SignupHandler {
 
     private async updateSheet(startingIndex: [number, number], msg: Message, sheet: GoogleSpreadsheetWorksheet) {
         const gService = Container.get<GoogleService>(GoogleService);
-        const mag = Container.get<Magtheridon>(Magtheridon);
-        const mapper = Container.get<Mapper>(Mapper);
+        // const mag = Container.get<Magtheridon>(Magtheridon);
+        // const mapper = Container.get<Mapper>(Mapper);
 
         await sheet.loadCells({
             startColumnIndex: startingIndex[0],
@@ -65,8 +77,6 @@ export class TwentyFiveMan implements SignupHandler {
             endColumnIndex: startingIndex[0] + 4 + 6,
             endRowIndex: startingIndex[1] + 20,
         });
-
-        gService.clearCells(startingIndex, [startingIndex[0] + 3, startingIndex[1] + 19], sheet);
 
         const date = DateService.getDateFromMessage(msg);
 
@@ -79,9 +89,9 @@ export class TwentyFiveMan implements SignupHandler {
 
         const fields = msg.embeds[0].fields;
 
-        const classes = mapper.embedFieldsToClasses(fields);
+        // const classes = mapper.embedFieldsToClasses(fields);
 
-        mag.updateSheet(classes);
+        // mag.updateSheet(classes);
 
         const tankFields = fields.filterValueByRegEx(RegEx.TankRegEx);
         const healerFields = fields.filterValueByRegEx(RegEx.HealerRegEx);
@@ -93,21 +103,21 @@ export class TwentyFiveMan implements SignupHandler {
         const rangedPairs = rangedFields.getNamesAndColors();
         const meleePairs = meleeFields.getNamesAndColors();
 
-        gService.makeCellSetupTitle(startingIndex, sheet);
-        gService.makeCellSignupTitle([startingIndex[0] + 6, startingIndex[1]], sheet);
+        //gService.makeCellSetupTitle(startingIndex, sheet);
+        gService.makeCellSignupTitle([startingIndex[0], startingIndex[1]], sheet);
 
+        //gService.makeCellValue([startingIndex[0], startingIndex[1] + 1], date as string, sheet);
         gService.makeCellValue([startingIndex[0], startingIndex[1] + 1], date as string, sheet);
-        gService.makeCellValue([startingIndex[0] + 6, startingIndex[1] + 1], date as string, sheet);
 
+        //gService.makeCellValue([startingIndex[0], startingIndex[1] + 2], title, sheet);
         gService.makeCellValue([startingIndex[0], startingIndex[1] + 2], title, sheet);
-        gService.makeCellValue([startingIndex[0] + 6, startingIndex[1] + 2], title, sheet);
 
+        //gService.addRoleHeadlines([startingIndex[0], startingIndex[1] + 3], sheet);
         gService.addRoleHeadlines([startingIndex[0], startingIndex[1] + 3], sheet);
-        gService.addRoleHeadlines([startingIndex[0] + 6, startingIndex[1] + 3], sheet);
 
-        gService.updateColumnWithColor([startingIndex[0] + 6, startingIndex[1] + 5], tankPairs, sheet);
-        gService.updateColumnWithColor([startingIndex[0] + 7, startingIndex[1] + 5], healerPairs, sheet);
-        gService.updateColumnWithColor([startingIndex[0] + 8, startingIndex[1] + 5], rangedPairs, sheet);
-        gService.updateColumnWithColor([startingIndex[0] + 9, startingIndex[1] + 5], meleePairs, sheet);
+        gService.updateColumnWithColor([startingIndex[0], startingIndex[1] + 5], tankPairs, sheet);
+        gService.updateColumnWithColor([startingIndex[0] + 1, startingIndex[1] + 5], healerPairs, sheet);
+        gService.updateColumnWithColor([startingIndex[0] + 2, startingIndex[1] + 5], rangedPairs, sheet);
+        gService.updateColumnWithColor([startingIndex[0] + 3, startingIndex[1] + 5], meleePairs, sheet);
     }
 }
